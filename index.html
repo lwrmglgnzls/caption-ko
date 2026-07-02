@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graduation Thank You Message Generator</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #07111f;
+    --bg-soft: #12243d;
+    --panel: rgba(13, 24, 40, 0.88);
+    --panel-strong: rgba(9, 18, 31, 0.95);
+    --line: rgba(255, 255, 255, 0.08);
+    --text: #eef3fb;
+    --muted: #a9b7cb;
+    --gold: #d7a84b;
+    --gold-deep: #b07d22;
+    --accent: #72b0ff;
+    --shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
+}
+
+body {
+    min-height: 100vh;
+    padding: 28px 16px;
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(215, 168, 75, 0.18), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(114, 176, 255, 0.16), transparent 28%),
+        linear-gradient(145deg, #040913 0%, #0b1730 48%, #0f2545 100%);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.shell {
+    width: min(1020px, 100%);
+    display: grid;
+    gap: 22px;
+    padding-top: 8px;
+}
+
+.hero {
+    padding: 28px 30px;
+    border-radius: 28px;
+    background: linear-gradient(145deg, rgba(14, 26, 44, 0.96), rgba(8, 16, 28, 0.92));
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+}
+
+.eyebrow {
+    display: inline-block;
+    margin-bottom: 14px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(215, 168, 75, 0.12);
+    border: 1px solid rgba(215, 168, 75, 0.25);
+    color: #f3cf83;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.76rem;
+}
+
+.hero h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.95rem, 5vw, 3.3rem);
+    line-height: 1.08;
+    margin-bottom: 0;
+    text-wrap: balance;
+}
+
+.workspace {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.panel {
+    border-radius: 26px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(12px);
+}
+
+.controls {
+    padding: 24px;
+    display: grid;
+    gap: 16px;
+    align-content: start;
+}
+
+.section-label {
+    color: #f2d28e;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    margin-bottom: 8px;
+}
+
+.generate-btn {
+    border: 0;
+    border-radius: 18px;
+    width: 100%;
+    min-height: 64px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+    color: #101720;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    box-shadow: 0 16px 28px rgba(176, 125, 34, 0.24);
+}
+
+.generate-btn:hover {
+    transform: translateY(-1px);
+}
+
+.button-stack {
+    display: grid;
+    gap: 12px;
+}
+
+.rickroll-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(114, 176, 255, 0.2);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    font-size: 0.96rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.rickroll-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(114, 176, 255, 0.4);
+    background: rgba(114, 176, 255, 0.08);
+}
+
+.preview {
+    padding: 24px;
+    display: grid;
+    gap: 18px;
+}
+
+.preview-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.preview-head h2 {
+    font-size: 1.35rem;
+}
+
+.meta {
+    color: var(--accent);
+    font-size: 0.9rem;
+}
+
+.message-box {
+    min-height: 390px;
+    padding: 24px;
+    border-radius: 22px;
+    background:
+        linear-gradient(180deg, rgba(10, 20, 35, 0.96), rgba(8, 17, 29, 0.98)),
+        repeating-linear-gradient(
+            180deg,
+            transparent 0,
+            transparent 31px,
+            rgba(255, 255, 255, 0.03) 32px
+        );
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #f4f7fb;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.9;
+    font-size: 1.03rem;
+}
+
+.message-box.empty {
+    min-height: 220px;
+    padding: 0;
+    background:
+        linear-gradient(180deg, rgba(10, 20, 35, 0.9), rgba(8, 17, 29, 0.94)),
+        repeating-linear-gradient(
+            180deg,
+            transparent 0,
+            transparent 31px,
+            rgba(255, 255, 255, 0.03) 32px
+        );
+}
+
+.message-box.fresh {
+    animation: fadeUp 0.3s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0.3;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 860px) {
+    .workspace {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .message-box {
+        min-height: 340px;
+    }
+
+    .controls {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 14px 10px 24px;
+    }
+
+    .shell {
+        gap: 14px;
+        padding-top: 0;
+    }
+
+    .hero,
+    .panel {
+        border-radius: 20px;
+    }
+
+    .hero {
+        padding: 18px 18px 20px;
+    }
+
+    .eyebrow {
+        margin-bottom: 10px;
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+
+    .hero h1 {
+        font-size: clamp(1.7rem, 9vw, 2.4rem);
+    }
+
+    .controls,
+    .preview {
+        padding: 18px;
+    }
+
+    .preview {
+        gap: 14px;
+    }
+
+    .preview-head {
+        align-items: start;
+        gap: 8px;
+    }
+
+    .preview-head h2 {
+        font-size: 1.15rem;
+    }
+
+    .meta {
+        font-size: 0.82rem;
+    }
+
+    .generate-btn {
+        min-height: 58px;
+        font-size: 0.96rem;
+    }
+
+    .message-box {
+        min-height: 280px;
+        padding: 18px;
+        border-radius: 18px;
+        font-size: 0.96rem;
+        line-height: 1.75;
+    }
+
+    .message-box.empty {
+        min-height: 160px;
+        padding: 0;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<main class="shell">
+    <section class="hero">
+        <span class="eyebrow">Caption Generator</span>
+        <h1>Grad post caption generator</h1>
+    </section>
+
+    <section class="workspace">
+        <aside class="panel controls">
+            <p class="section-label">Generator</p>
+            <div class="button-stack">
+                <button class="generate-btn" id="generateBtn">Generate message</button>
+                <a
+                    class="rickroll-btn"
+                    href="https://youtu.be/dQw4w9WgXcQ?si=t5rGYg5LxjBFpM0n"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Generate another
+                </a>
+            </div>
+        </aside>
+
+        <section class="panel preview">
+            <div class="preview-head">
+                <div>
+                    <p class="section-label">Preview</p>
+                    <h2>Generated message</h2>
+                </div>
+                <span class="meta">Balagbag</span>
+            </div>
+
+            <div class="message-box empty" id="message" aria-live="polite"></div>
+        </section>
+    </section>
+</main>
+
+<script>
+const messageBank = {
+    openings: [
+        "Mga bes, naka-graduate rin. Plot twist of the year: the stressed student actually survived.",
+        "Officially graduated, and honestly this feels as unexpected as seeing 'binangkal recipe' in a completely unrelated comment section.",
+        "From cramming, overthinking, and saying 'kaya pa ba?' to wearing a toga, we really made it."
+    ],
+    family: [
+        "To my family, salamat for the love, support, prayers, and the classic 'anak, kaya mo yan' energy. You carried me through deadlines, doubts, and dramatic exam weeks.",
+        "To my family, thank you for the baon, patience, encouragement, and motivation. Without you, this whole journey might have stayed in draft mode.",
+        "My family deserves a huge thank you for supporting me through every stress spiral, every requirement, and every 'malapit na talaga' moment."
+    ],
+    teachers: [
+        "To my teachers and professors, thank you for the lessons, patience, and grace. If I ever looked calm in class, please know that was just academic acting.",
+        "Thank you to every teacher who pushed me to do better, even when my brain was already saying, 'edi wow, pahinga naman.'",
+        "To all my educators, salamat for guiding me through the chaos and helping me turn effort, panic, and prayers into something meaningful."
+    ],
+    friends: [
+        "To my friends and classmates, salamat sa reviewers, chika breaks, and mutual support. We really turned shared panic into a graduation strategy.",
+        "Thank you to the friends who saw me at my most stressed and still stayed. You made the hard days lighter and the funny days unforgettable.",
+        "To my circle, thank you for every laugh, every last-minute reminder, and every 'sana all tapos na' conversation that kept me sane."
+    ],
+    supporters: [
+        "To everyone who prayed for me, checked on me, and believed in me, maraming salamat. Your encouragement hit harder than any motivational post.",
+        "Thank you to everyone who rooted for me from near or far. In the middle of all the pressure, your support reminded me not to give up.",
+        "To the people who sent kind words, good vibes, and quiet support, thank you. You were part of this win even if you did not always see the struggle."
+    ],
+    endings: [
+        "So yes, diploma secured, character development completed, and the family group chat finally has fresh content. Maraming salamat sa inyong lahat.",
+        "This graduation is for everyone who helped me get here. Respectfully, I will be bringing this up for a very long time.",
+        "We made it through the plot twists, the panic, and the pressure. Salamat, Lord, and salamat sa lahat ng naniwala sa akin."
+    ]
+};
+const messageEl = document.getElementById("message");
+const generateBtn = document.getElementById("generateBtn");
+
+function randomItem(items) {
+    return items[Math.floor(Math.random() * items.length)];
+}
+
+function generateMessage() {
+    const message = [
+        randomItem(messageBank.openings),
+        randomItem(messageBank.family),
+        randomItem(messageBank.teachers),
+        randomItem(messageBank.friends),
+        randomItem(messageBank.supporters),
+        randomItem(messageBank.endings)
+    ].join("\n\n");
+
+    messageEl.classList.remove("empty");
+    messageEl.classList.remove("fresh");
+    void messageEl.offsetWidth;
+    messageEl.textContent = message;
+    messageEl.classList.add("fresh");
+}
+
+generateBtn.addEventListener("click", generateMessage);
+</script>
+
+</body>
+</html>
